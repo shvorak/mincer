@@ -17,7 +17,6 @@ namespace Mincer
          */
         private $_profiles = [];
 
-
         /**
          * Register converting profile
          *
@@ -131,7 +130,7 @@ namespace Mincer
          *
          * @return ConverterConfig
          */
-        protected function getConfigFor($className)
+        private function getConfigFor($className)
         {
             if (false === array_key_exists($className, $this->_configs)) {
                 $profile = $this->getProfileFor($className);
@@ -159,7 +158,7 @@ namespace Mincer
          *
          * @return ConverterMember|boolean
          */
-        protected function selectMember($members, $name)
+        private function selectMember($members, $name)
         {
             if (array_key_exists($name, $members)) {
                 return $members[$name];
@@ -177,7 +176,7 @@ namespace Mincer
          *
          * @return ConverterMember[]
          */
-        protected function getMembersFor($className)
+        private function getMembersFor($className)
         {
             $config = $this->getConfigFor($className);
             $profile = $this->getProfileFor($className);
@@ -194,7 +193,7 @@ namespace Mincer
          *
          * @return ConverterProfile|null
          */
-        protected function getProfileFor($className)
+        private function getProfileFor($className)
         {
             $profiles = array_filter($this->_profiles, function (ConverterProfile $profile) use ($className) {
                 return $profile->hasConfig($className);
