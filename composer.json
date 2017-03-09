@@ -1,0 +1,19 @@
+{
+    "name": "emerido/mincer",
+    "description": "Dynamic data to Classes and reverse converter for PHP",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aleksey Shvorak",
+            "email": "dr.emerido@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Mincer\\": "./src",
+            "MincerTest\\": "./tests"
+        }
+    }
+}
