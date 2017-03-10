@@ -115,11 +115,13 @@ namespace Mincer
                 $profile = $this->getProfileFor($className);
                 $factory = $profile->getConfigs()[$className];
 
-                // Register converter config
-                $this->_configs[$className] = $config = new ConverterConfig($className);
+                $builder = new ConverterConfigBuilder($className);
 
                 // Execute config factory
-                call_user_func($factory, $config);
+                call_user_func($factory, $builder);
+
+                // Register converter config
+                $this->_configs[$className] = $builder->getConfig();
             }
 
             if (false === array_key_exists($className, $this->_configs)) {

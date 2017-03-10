@@ -44,30 +44,13 @@ namespace Mincer
         /**
          * ConverterConfig constructor.
          *
-         * @param string $class
+         * @param string            $class
+         * @param ConverterMember[] $members
          */
-        public function __construct($class)
+        public function __construct($class, array $members)
         {
             $this->_class = $class;
-        }
-
-        /**
-         * @param string $name
-         *
-         * @return ConverterMember
-         */
-        public function property($name)
-        {
-            return $this->_members[$name] = new ConverterMember($name);
-        }
-
-        /**
-         * @param string $name
-         *
-         * @return ConverterMember
-         */
-        public function value($name) {
-            return $this->_value = new ConverterMember($name);
+            $this->_members = $members;
         }
 
         /**

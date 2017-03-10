@@ -4,6 +4,7 @@ namespace MincerTest\Stubs\Converter
 {
 
     use Mincer\ConverterConfig;
+    use Mincer\ConverterConfigBuilder;
     use Mincer\ConverterProfile;
     use MincerTest\Stubs\Messages\Comment;
     use MincerTest\Stubs\Messages\CommentCollection;
@@ -23,7 +24,7 @@ namespace MincerTest\Stubs\Converter
             $this->properties(['id'])->integer();
             $this->properties(['createdDate', 'updatedDate'])->date(DATE_COOKIE);
 
-            $this->create(User::class, function (ConverterConfig $config) {
+            $this->create(User::class, function (ConverterConfigBuilder $config) {
                 $config->property('profile')->typeOf(Profile::class);
                 $config->property('comments')->listOf(Comment::class, CommentCollection::class);
             });
