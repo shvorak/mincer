@@ -1,6 +1,7 @@
 {
     "name": "emerido/mincer",
     "version": "0.0.1",
+    "minimum-stability": "dev",
     "description": "Dynamic data to Classes and reverse converter for PHP",
     "type": "library",
     "license": "MIT",
