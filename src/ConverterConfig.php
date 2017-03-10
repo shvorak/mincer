@@ -3,13 +3,26 @@
 namespace Mincer
 {
 
+    use ReflectionClass;
+    use ReflectionProperty;
+
+    /**
+     * Class ConverterConfig
+     *
+     * Class converter config
+     *
+     * @package Mincer
+     */
     class ConverterConfig
     {
 
+        /**
+         * @var string
+         */
         private $_class;
 
         /**
-         * @var ConverterMember
+         * @var ConverterMember|null
          */
         private $_value = false;
 
@@ -17,6 +30,16 @@ namespace Mincer
          * @var ConverterMember[]
          */
         private $_members = [];
+
+        /**
+         * @var ReflectionClass
+         */
+        private $_reflect;
+
+        /**
+         * @var ReflectionProperty[]
+         */
+        private $_properties;
 
         /**
          * ConverterConfig constructor.
@@ -65,35 +88,70 @@ namespace Mincer
             return $this->_members[$name];
         }
 
+        /**
+         * Returns member if type using single value representation
+         *
+         * @return ConverterMember|null
+         */
         public function getValue()
         {
             return $this->_value;
         }
 
         /**
-         * @return ConverterProperty[]
-         */
-        public function getProperties()
-        {
-            $reflection = new \ReflectionClass($this->_class);
-            $properties = array_filter($reflection->getProperties(), function (\ReflectionProperty $property) {
-                return $property->isStatic() === false;
-            });
-
-            return array_map(function (\ReflectionProperty $property) {
-                return new ConverterProperty($property);
-            }, $properties);
-        }
-
-        /**
+         * Returns specific class property
+         *
          * @param string $name
+         *
          * @return ConverterProperty
          */
         public function getProperty($name)
         {
-            return array_filter($this->getProperties(), function (ConverterProperty $property) use ($name) {
+            $properties = array_filter($this->getProperties(), function (ConverterProperty $property) use ($name) {
                 return $property->getName() == $name ? $property : null;
-            })[0];
+            });
+
+            if (count($properties) == 0) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Property %s not exists in class', $name
+                ));
+            }
+            return $properties[0];
+        }
+
+        /**
+         * Returns properties for class type
+         *
+         * @return ConverterProperty[]
+         */
+        public function getProperties()
+        {
+            if ($this->_properties == null) {
+                $list = array_filter(
+                    $this->getReflection()->getProperties(),
+                    function (ReflectionProperty $property) {
+                        return $property->isStatic() === false;
+                    }
+                );
+                $this->_properties = array_map(function (ReflectionProperty $property) {
+                    return new ConverterProperty($property);
+                }, $list);
+            }
+
+            return $this->_properties;
+        }
+
+        /**
+         * Returns class reflection
+         *
+         * @return ReflectionClass
+         */
+        public function getReflection()
+        {
+            if ($this->_reflect == null) {
+                $this->_reflect = new ReflectionClass($this->_class);
+            }
+            return $this->_reflect;
         }
 
     }

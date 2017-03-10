@@ -5,6 +5,11 @@ namespace Mincer
 
     use ReflectionProperty;
 
+    /**
+     * Class ConverterProperty
+     *
+     * @package Mincer
+     */
     class ConverterProperty
     {
 
@@ -49,6 +54,13 @@ namespace Mincer
             if ($this->hasSetter()) {
                 return [$instance, 'set' . ucfirst($this->_reflect->name)];
             }
+
+            if (false === $this->isPublic()) {
+                throw new \Exception(sprintf(
+                    'Property %s is not public and setter not defined', $this->_reflect->name
+                ));
+            }
+
             return function ($value) use ($instance) { $instance->{$this->_reflect->name} = $value;};
         }
 
@@ -80,11 +92,18 @@ namespace Mincer
                 return [$instance, 'get' . ucfirst($this->_reflect->name)];
             }
 
-            if (false === array_key_exists($this->_reflect->name, get_object_vars($instance))) {
-                throw new \Exception(sprintf('Getter for property %s not defined', $this->_reflect->name));
+            if (false === $this->isPublic()) {
+                throw new \Exception(sprintf(
+                    'Property %s is not public and getter not defined', $this->_reflect->name
+                ));
             }
 
             return function () use ($instance) { return $instance->{$this->_reflect->name};};
+        }
+
+        public function isPublic()
+        {
+            return $this->_reflect->isPublic();
         }
 
         /**

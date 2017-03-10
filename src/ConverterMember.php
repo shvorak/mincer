@@ -51,7 +51,7 @@ namespace Mincer
             $this->_strategy = new ClassStrategy($class);
         }
 
-        public function arrayOf($class) {
+        public function listOf($class) {
             $this->_strategy = new ClassStrategy($class, true);
         }
 
