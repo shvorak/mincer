@@ -5,6 +5,8 @@ namespace MincerTest\Stubs\Converter
 
     use Mincer\ConverterConfig;
     use Mincer\ConverterProfile;
+    use MincerTest\Stubs\Messages\Comment;
+    use MincerTest\Stubs\Messages\CommentCollection;
     use MincerTest\Stubs\Messages\Profile;
     use MincerTest\Stubs\Messages\User;
 
@@ -17,18 +19,17 @@ namespace MincerTest\Stubs\Converter
          */
         public function __construct()
         {
+
+            $this->fallback()->string();
+
+            $this->members('id')->integer();
+            $this->members('createdDate')->date(DATE_COOKIE);
+
             $this->create(User::class, function (ConverterConfig $config) {
-                $config->member('id')->integer();
-                $config->member('email')->string();
                 $config->member('profile')->typeOf(Profile::class);
-                $config->member('createdDate')->date(DATE_COOKIE);
             });
 
-            $this->create(Profile::class, function (ConverterConfig $config) {
-                $config->member('name')->string();
-                $config->member('surname')->string();
-                $config->member('patronymic')->string();
-            });
+            $this->create(Profile::class);
         }
     }
 

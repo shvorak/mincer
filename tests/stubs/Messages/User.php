@@ -15,6 +15,12 @@ namespace MincerTest\Stubs\Messages
          * @var Profile
          */
         protected $profile;
+
+        /**
+         * @var CommentCollection
+         */
+        protected $comments;
+
         /**
          * @var \DateTime
          */
