@@ -18,6 +18,11 @@ $model = new \MincerTest\Stubs\Messages\User(
 );
 
 
+$model->setComments(new \MincerTest\Stubs\Messages\CommentCollection([
+    new \MincerTest\Stubs\Messages\Comment('Hello', 1),
+    new \MincerTest\Stubs\Messages\Comment('Hi', 2),
+]));
+
 $dynamic = $converter->serialize($model);
 
 dump($dynamic);

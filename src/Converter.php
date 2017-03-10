@@ -38,27 +38,18 @@ namespace Mincer
             $result = [];
             $config = $this->getConfigFor(get_class($data));
 
+            $members = $this->getMembersFor(get_class($data));
+
             $properties = $config->getProperties();
 
-            $member = $config->getValue();
-            if ($member && $member instanceof ConverterMember) {
-                $property = $config->getProperty($member->getName());
+            foreach ($properties as $property) {
 
-                return $member->getStrategy()
-                    ->serialize($property->get($data), $this);
-            } else {
+                $name = $property->getName();
+                $member = $this->selectMember($members, $name);
 
-                $members = $this->getMembersFor(get_class($data));
-
-                foreach ($properties as $property) {
-
-                    $name = $property->getName();
-                    $member = $this->selectMember($members, $name);
-
-                    if ($member) {
-                        $result[$name] = $member->getStrategy()
-                            ->serialize($property->get($data), $this);
-                    }
+                if ($member) {
+                    $result[$name] = $member->getStrategy()
+                        ->serialize($property->get($data), $this);
                 }
             }
 
@@ -79,37 +70,25 @@ namespace Mincer
             $config = $this->getConfigFor($className);
             $properties = $config->getProperties();
 
-            $value = $config->getValue();
+            $members = $this->getMembersFor($className);
 
-            if ($value && $value instanceof ConverterMember) {
-                $property = $config->getProperty($value->getName());
-                if (null === $property) {
-                    throw new \InvalidArgumentException('No property');
+            foreach ($properties as $property) {
+                $name = $property->getName();
+
+                if (false === array_key_exists($name, $data)) {
+                    // No data passed
+                    // TODO : Maybe need throw ValidateException?
+                    continue;
                 }
 
-                $property->set($result, $value->getStrategy()->deserialize($data, $this));
+                $member = $this->selectMember($members, $property->getName());
 
-            } else {
-                $members = $this->getMembersFor($className);
-
-                foreach ($properties as $property) {
-                    $name = $property->getName();
-
-                    if (false === array_key_exists($name, $data)) {
-                        // No data passed
-                        // TODO : Maybe need throw ValidateException?
-                        continue;
-                    }
-
-                    $member = $this->selectMember($members, $property->getName());
-
-                    if ($member) {
-                        $property->set($result,
-                            $member
-                                ->getStrategy()
-                                ->deserialize($data[$name], $this)
-                        );
-                    }
+                if ($member) {
+                    $property->set($result,
+                        $member
+                            ->getStrategy()
+                            ->deserialize($data[$name], $this)
+                    );
                 }
             }
 

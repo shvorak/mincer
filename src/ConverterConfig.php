@@ -56,7 +56,7 @@ namespace Mincer
          *
          * @return ConverterMember
          */
-        public function member($name)
+        public function property($name)
         {
             return $this->_members[$name] = new ConverterMember($name);
         }

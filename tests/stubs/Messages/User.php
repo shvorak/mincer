@@ -30,6 +30,7 @@ namespace MincerTest\Stubs\Messages
          * User constructor.
          * @param $id
          * @param $email
+         * @param \DateTime $createdDate
          * @param Profile $profile
          */
         public function __construct($id, $email, \DateTime $createdDate, Profile $profile)
@@ -72,6 +73,21 @@ namespace MincerTest\Stubs\Messages
             $this->createdDate = $createdDate;
         }
 
+        /**
+         * @return CommentCollection
+         */
+        public function getComments()
+        {
+            return $this->comments;
+        }
+
+        /**
+         * @param CommentCollection $comments
+         */
+        public function setComments($comments)
+        {
+            $this->comments = $comments;
+        }
 
     }
 

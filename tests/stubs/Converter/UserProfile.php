@@ -19,17 +19,17 @@ namespace MincerTest\Stubs\Converter
          */
         public function __construct()
         {
-
-            $this->fallback()->string();
-
-            $this->members('id')->integer();
-            $this->members('createdDate')->date(DATE_COOKIE);
+            $this->others()->string();
+            $this->properties(['id'])->integer();
+            $this->properties(['createdDate', 'updatedDate'])->date(DATE_COOKIE);
 
             $this->create(User::class, function (ConverterConfig $config) {
-                $config->member('profile')->typeOf(Profile::class);
+                $config->property('profile')->typeOf(Profile::class);
+                $config->property('comments')->listOf(Comment::class, CommentCollection::class);
             });
 
             $this->create(Profile::class);
+            $this->create(Comment::class);
         }
     }
 

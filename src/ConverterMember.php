@@ -51,8 +51,8 @@ namespace Mincer
             $this->_strategy = new ClassStrategy($class);
         }
 
-        public function listOf($class) {
-            $this->_strategy = new ClassStrategy($class, true);
+        public function listOf($class, $wrapper = null) {
+            $this->_strategy = new ClassStrategy($class, true, $wrapper);
         }
 
         public function date($format = DATE_ISO8601) {
@@ -84,7 +84,11 @@ namespace Mincer
          */
         public function getStrategy()
         {
-            // TODO : Check strategy existing
+            if (null === $this->_strategy) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Strategy for member %s not defined', $this->_name
+                ));
+            }
             return $this->_strategy;
         }
 

@@ -22,20 +22,26 @@ namespace Mincer
          *
          * @return ConverterMember
          */
-        function fallback() {
-            return $this->members(ConverterMember::FALLBACK);
+        function others() {
+            return $this->properties(ConverterMember::FALLBACK);
         }
 
         /**
          * Register converting strategy for all members named like passed string
          * This rule working only inside profile
          *
-         * @param string $memberName
+         * @param string|string[] $memberName
          *
          * @return ConverterMember
          */
-        function members($memberName) {
-            return $this->_members[$memberName] = new ConverterMember($memberName);
+        function properties($memberName) {
+            $member = new ConverterMember($memberName);
+
+            foreach ((array)$memberName as $name) {
+                $this->_members[$name] = $member;
+            }
+
+            return $member;
         }
 
         /**
