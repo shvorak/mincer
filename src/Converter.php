@@ -18,17 +18,18 @@ namespace Mincer
         private $_profiles = [];
 
         /**
-         * Register converting profile
-         *
-         * @param ConverterProfile $profile
-         *
-         * @return void
+         * @inheritdoc
          */
         function register(ConverterProfile $profile)
         {
             $this->_profiles[] = $profile;
+
+            return $this;
         }
 
+        /**
+         * @inheritdoc
+         */
         function serialize($data)
         {
             if (false === is_object($data)) {
@@ -56,6 +57,9 @@ namespace Mincer
             return $result;
         }
 
+        /**
+         * @inheritdoc
+         */
         function serializeCollection($data)
         {
             return array_map(function ($item) {
@@ -63,6 +67,9 @@ namespace Mincer
             }, $data);
         }
 
+        /**
+         * @inheritdoc
+         */
         function deserialize($data, $className)
         {
             $reflect = new \ReflectionClass($className);
@@ -95,6 +102,9 @@ namespace Mincer
             return $result;
         }
 
+        /**
+         * @inheritdoc
+         */
         function deserializeCollection($data, $className)
         {
             return array_map(function ($item) use ($className) {
