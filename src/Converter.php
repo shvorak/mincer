@@ -193,6 +193,9 @@ namespace Mincer
             if (count($profiles) > 1) {
                 throw new \Exception('Multiple class converter config found');
             }
+            if (count($profiles) === 0) {
+                throw new \Exception(sprintf('Profile for class %s not found.', $className));
+            }
 
             return $profiles[0];
         }
