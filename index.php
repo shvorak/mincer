@@ -3,10 +3,9 @@
 function dump($value) {
     echo '<pre>' . print_r($value, true) . '</pre>';
 }
-
 $converter = new \MincerTest\Stubs\Converter\BaseConverter();
 
-$model = new \MincerTest\Stubs\Messages\User(
+$model = new \MincerTest\Stubs\Messages\CreateUserMessage(
     1,
     'admin@admin.com',
     new DateTime(),
@@ -27,6 +26,6 @@ $dynamic = $converter->serialize($model);
 
 dump($dynamic);
 
-$strict = $converter->deserialize($dynamic, \MincerTest\Stubs\Messages\User::class);
+$strict = $converter->deserialize($dynamic, \MincerTest\Stubs\Messages\CreateUserMessage::class);
 
 dump($strict);

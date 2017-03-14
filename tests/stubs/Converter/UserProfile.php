@@ -8,6 +8,7 @@ namespace MincerTest\Stubs\Converter
     use Mincer\ConverterProfile;
     use MincerTest\Stubs\Messages\Comment;
     use MincerTest\Stubs\Messages\CommentCollection;
+    use MincerTest\Stubs\Messages\CreateUserMessage;
     use MincerTest\Stubs\Messages\Profile;
     use MincerTest\Stubs\Messages\User;
 
@@ -28,6 +29,8 @@ namespace MincerTest\Stubs\Converter
                 $config->property('profile')->typeOf(Profile::class);
                 $config->property('comments')->listOf(Comment::class, CommentCollection::class);
             });
+
+            $this->create(CreateUserMessage::class);
 
             $this->create(Profile::class);
             $this->create(Comment::class);

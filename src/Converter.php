@@ -171,8 +171,18 @@ namespace Mincer
         {
             $config = $this->getConfigFor($className);
             $profile = $this->getProfileFor($className);
+            $members = $config->getMembers();
 
-            return array_merge($profile->getMembers(), $config->getMembers());
+            $parent = $config->getReflection()->getParentClass();
+            while ($parent) {
+                try {
+                    $parentConfig = $this->getConfigFor($parent->getName());
+                    $members = array_merge($parentConfig->getMembers(), $members);
+                    $parent = $parent->getParentClass();
+                } catch (\Exception $exception) { }
+            }
+
+            return array_merge($profile->getMembers(), $members);
         }
 
         /**

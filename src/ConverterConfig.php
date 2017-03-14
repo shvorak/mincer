@@ -110,12 +110,27 @@ namespace Mincer
         public function getProperties()
         {
             if ($this->_properties == null) {
-                $list = array_filter(
-                    $this->getReflection()->getProperties(),
-                    function (ReflectionProperty $property) {
-                        return $property->isStatic() === false;
+                $properties = [];
+                $parent = $this->getReflection()->getParentClass();
+                while ($parent) {
+                    try {
+                        $properties = array_merge($properties, $parent->getProperties());
+                        $parent = $parent->getParentClass();
+                    } catch (\Exception $exception) { }
+                }
+                $properties = array_merge($this->getReflection()->getProperties(), $properties);
+
+                $properties = array_reduce($properties, function ($list, ReflectionProperty $item) {
+                    if (false === array_key_exists($item->getName(), $list)) {
+                        $list[$item->getName()] = $item;
                     }
-                );
+                    return $list;
+                }, []);
+
+                $list = array_filter($properties, function (ReflectionProperty $property) {
+                    return $property->isStatic() === false;
+                });
+
                 $this->_properties = array_map(function (ReflectionProperty $property) {
                     return new ConverterProperty($property);
                 }, $list);
