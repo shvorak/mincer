@@ -30,12 +30,12 @@ namespace Mincer\Strategies
          */
         function serialize($value, IConverter $converter)
         {
-            return $value->format($this->_format);
+            return $value ? $value->format($this->_format) : $value;
         }
 
         function deserialize($value, IConverter $converter)
         {
-            return DateTime::createFromFormat($this->_format, $value);
+            return $value ? DateTime::createFromFormat($this->_format, $value) : $value;
         }
 
     }
