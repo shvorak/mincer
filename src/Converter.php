@@ -207,7 +207,7 @@ namespace Mincer
                 throw new \Exception(sprintf('Profile for class %s not found.', $className));
             }
 
-            return $profiles[0];
+            return array_values($profiles)[0];
         }
 
     }
