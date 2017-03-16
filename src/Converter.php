@@ -37,9 +37,9 @@ namespace Mincer
             }
 
             $result = [];
-            $config = $this->getConfigFor(get_class($data));
+            $config = $this->selectConfigFor(get_class($data));
 
-            $members = $this->getMembersFor(get_class($data));
+            $members = $this->selectMembersFor(get_class($data));
 
             $properties = $config->getProperties();
 
@@ -74,10 +74,10 @@ namespace Mincer
         {
             $reflect = new \ReflectionClass($className);
             $result = $reflect->newInstanceWithoutConstructor();
-            $config = $this->getConfigFor($className);
+            $config = $this->selectConfigFor($className);
             $properties = $config->getProperties();
 
-            $members = $this->getMembersFor($className);
+            $members = $this->selectMembersFor($className);
 
             foreach ($properties as $property) {
                 $name = $property->getName();
@@ -119,12 +119,11 @@ namespace Mincer
          *
          * @return ConverterConfig
          */
-        private function getConfigFor($className)
+        private function selectConfigFor($className)
         {
             if (false === array_key_exists($className, $this->_configs)) {
-                $profile = $this->getProfileFor($className);
-                $factory = $profile->getConfigs()[$className];
-
+                $profile = $this->selectProfileFor($className);
+                $factory = $profile->getConfig($className);
                 $builder = new ConverterConfigBuilder($className);
 
                 // Execute config factory
@@ -167,19 +166,18 @@ namespace Mincer
          *
          * @return ConverterMember[]
          */
-        private function getMembersFor($className)
+        private function selectMembersFor($className)
         {
-            $config = $this->getConfigFor($className);
-            $profile = $this->getProfileFor($className);
+            $config = $this->selectConfigFor($className);
+            $profile = $this->selectProfileFor($className);
             $members = $config->getMembers();
 
             $parent = $config->getReflection()->getParentClass();
+
             while ($parent) {
-                try {
-                    $parentConfig = $this->getConfigFor($parent->getName());
-                    $members = array_merge($parentConfig->getMembers(), $members);
-                    $parent = $parent->getParentClass();
-                } catch (\Exception $exception) { }
+                $parentConfig = $this->selectConfigFor($parent->getName());
+                $members = array_merge($parentConfig->getMembers(), $members);
+                $parent = $parent->getParentClass();
             }
 
             return array_merge($profile->getMembers(), $members);
@@ -194,7 +192,7 @@ namespace Mincer
          *
          * @return ConverterProfile|null
          */
-        private function getProfileFor($className)
+        private function selectProfileFor($className)
         {
             $profiles = array_filter($this->_profiles, function (ConverterProfile $profile) use ($className) {
                 return $profile->hasConfig($className);

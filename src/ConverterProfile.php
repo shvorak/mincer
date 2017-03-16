@@ -81,6 +81,23 @@ namespace Mincer
         }
 
         /**
+         * Returns configuration factory for class
+         *
+         * @param string $className
+         *
+         * @return callable
+         */
+        public function getConfig($className)
+        {
+            if (false === $this->hasConfig($className)) {
+                throw new \InvalidArgumentException(
+                    sprintf('Profile doesn\'t have converter configuration for class %s', $className)
+                );
+            }
+            return $this->_configs[$className];
+        }
+
+        /**
          * @return ConverterMember[]
          */
         public function getMembers()
