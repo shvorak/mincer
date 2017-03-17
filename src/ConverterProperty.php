@@ -36,7 +36,7 @@ namespace Mincer
         {
             return method_exists(
                 $this->_reflect->class,
-                'set' . ucfirst($this->_reflect->name)
+                $this->getSetterName()
             );
         }
 
@@ -52,7 +52,7 @@ namespace Mincer
         public function getSetter($instance)
         {
             if ($this->hasSetter()) {
-                return [$instance, 'set' . ucfirst($this->_reflect->name)];
+                return [$instance, $this->getSetterName()];
             }
 
             if (false === $this->isPublic()) {
@@ -73,7 +73,7 @@ namespace Mincer
         {
             return method_exists(
                 $this->_reflect->class,
-                'get' . ucfirst($this->_reflect->name)
+                $this->getGetterName()
             );
         }
 
@@ -89,7 +89,7 @@ namespace Mincer
         public function getGetter($instance)
         {
             if ($this->hasGetter()) {
-                return [$instance, 'get' . ucfirst($this->_reflect->name)];
+                return [$instance, $this->getGetterName()];
             }
 
             if (false === $this->isPublic()) {
@@ -137,6 +137,39 @@ namespace Mincer
          */
         public function get($owner) {
             return call_user_func($this->getGetter($owner));
+        }
+
+        /**
+         * @return ReflectionProperty
+         */
+        public function getReflection()
+        {
+            return $this->_reflect;
+        }
+
+        /**
+         * Returns best getter method
+         *
+         * @return string
+         */
+        private function getGetterName()
+        {
+            $class = $this->_reflect->getDeclaringClass();
+            $method = ucfirst($this->getReflection()->name);
+            if ($class->hasMethod('is' . $method)) {
+                return 'is' . $method;
+            }
+            return 'get' . ucfirst($this->_reflect->name);
+        }
+
+        /**
+         * Returns setter name
+         *
+         * @return string
+         */
+        private function getSetterName()
+        {
+            return 'set' . ucfirst($this->_reflect->name);
         }
 
     }

@@ -72,16 +72,6 @@ namespace Mincer
         }
 
         /**
-         * Returns member if type using single value representation
-         *
-         * @return ConverterMember|null
-         */
-        public function getValue()
-        {
-            return $this->_value;
-        }
-
-        /**
          * Returns specific class property
          *
          * @param string $name
@@ -90,16 +80,15 @@ namespace Mincer
          */
         public function getProperty($name)
         {
-            $properties = array_filter($this->getProperties(), function (ConverterProperty $property) use ($name) {
-                return $property->getName() == $name ? $property : null;
-            });
+            $properties = $this->getProperties();
 
-            if (count($properties) == 0) {
+            if (false === array_key_exists($name, $properties)) {
                 throw new \InvalidArgumentException(sprintf(
                     'Property %s not exists in class', $name
                 ));
             }
-            return $properties[0];
+
+            return $properties[$name];
         }
 
         /**

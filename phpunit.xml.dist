@@ -1,0 +1,25 @@
+<phpunit bootstrap="./tests/bootstrap.php">
+    <php>
+        <!-- Or, specify each require parameter individually -->
+    </php>
+
+    <testsuites>
+        <testsuite name="mincer">
+            <directory>tests/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./src</directory>
+            <exclude>
+                <directory suffix=".php">./tests/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-html" target="./tests/output/codeCoverage" charset="UTF-8" yui="true" highlight="true" lowUpperBound="50" highLowerBound="80"/>
+        <log type="testdox-html" target="./tests/output/testdox.html" />
+    </logging>
+</phpunit>

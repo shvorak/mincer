@@ -8,6 +8,13 @@ namespace Mincer\Strategies
     class ScalarStrategy extends BaseStrategy
     {
 
+        const SUPPORTER = [
+            'string',
+            'integer',
+            'boolean',
+            'float',
+        ];
+
         /**
          * @var string
          */
@@ -20,19 +27,29 @@ namespace Mincer\Strategies
          */
         public function __construct($type)
         {
-            // TODO : Check by predefined type's list
+            if (false === in_array($type, static::SUPPORTER)) {
+                throw new \InvalidArgumentException(
+                    sprintf('Type "%s" not supported by ScalarStrategy', $type)
+                );
+            }
             $this->_type = $type;
+        }
+
+        function serialize($value, IConverter $converter)
+        {
+            if (is_array($value) || is_object($value) || is_resource($value)) {
+                throw new \InvalidArgumentException(
+                    sprintf('Can\'t convert non scalar value, %s given', gettype($value))
+                );
+            }
+            $target = $value;
+            settype($target, $this->_type);
+            return $target;
         }
 
         function deserialize($value, IConverter $converter)
         {
-            $target = $value;
-            if (false === settype($target, $this->_type)) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Can\'t convert value %s to %s type', $value, $this->_type
-                ));
-            }
-            return $target;
+            return $this->serialize($value, $converter);
         }
 
     }

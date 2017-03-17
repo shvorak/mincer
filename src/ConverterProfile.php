@@ -8,7 +8,7 @@ namespace Mincer
     {
 
         /**
-         * @var callable[]
+         * @var ConverterConfig[]
          */
         private $_configs = [];
 
@@ -16,6 +16,11 @@ namespace Mincer
          * @var ConverterMember[]
          */
         private $_members = [];
+
+        /**
+         * @var callable[]
+         */
+        private $_builders = [];
 
         /**
          * Register fallback for all unhandled members in this profile
@@ -59,16 +64,7 @@ namespace Mincer
             if (false === class_exists($class)) {
                 throw new \Exception('Invalid class name');
             }
-            $this->_configs[$class] = is_callable($configFactory) ? $configFactory : function() {};
-        }
-
-
-        /**
-         * @return array
-         */
-        public function getConfigs()
-        {
-            return $this->_configs;
+            $this->_builders[$class] = is_callable($configFactory) ? $configFactory : function() {};
         }
 
         /**
@@ -77,7 +73,8 @@ namespace Mincer
          */
         public function hasConfig($className)
         {
-            return array_key_exists($className, $this->_configs);
+            return array_key_exists($className, $this->_configs)
+                || array_key_exists($className, $this->_builders);
         }
 
         /**
@@ -85,10 +82,19 @@ namespace Mincer
          *
          * @param string $className
          *
-         * @return callable
+         * @return ConverterConfig
          */
         public function getConfig($className)
         {
+            if (array_key_exists($className, $this->_configs)) {
+                return $this->_configs[$className];
+            }
+            if (array_key_exists($className, $this->_builders)) {
+                $builder = new ConverterConfigBuilder($className);
+                call_user_func($this->_builders[$className], $builder);
+                $this->_configs[$className] = $builder->getConfig();
+            }
+
             if (false === $this->hasConfig($className)) {
                 throw new \InvalidArgumentException(
                     sprintf('Profile doesn\'t have converter configuration for class %s', $className)

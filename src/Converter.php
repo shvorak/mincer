@@ -82,15 +82,15 @@ namespace Mincer
             foreach ($properties as $property) {
                 $name = $property->getName();
 
+                // TODO : Check if value exists  if (false === array_key_exists($name, $data))
                 if (false === array_key_exists($name, $data)) {
                     // No data passed
                     // TODO : Maybe need throw ValidateException?
                     continue;
                 }
 
-                $member = $this->selectMember($members, $property->getName());
-
-                if ($member) {
+                if ($member = $this->selectMember($members, $property->getName())) {
+                    // TODO : Check for null values
                     $property->set($result,
                         $member
                             ->getStrategy()
@@ -98,7 +98,6 @@ namespace Mincer
                     );
                 }
             }
-
             return $result;
         }
 
@@ -123,16 +122,11 @@ namespace Mincer
         {
             if (false === array_key_exists($className, $this->_configs)) {
                 $profile = $this->selectProfileFor($className);
-                $factory = $profile->getConfig($className);
-                $builder = new ConverterConfigBuilder($className);
-
-                // Execute config factory
-                call_user_func($factory, $builder);
-
                 // Register converter config
-                $this->_configs[$className] = $builder->getConfig();
+                $this->_configs[$className] = $profile->getConfig($className);
             }
 
+            // TODO : Remove this condition
             if (false === array_key_exists($className, $this->_configs)) {
                 throw new \InvalidArgumentException('Converter config not found');
             }

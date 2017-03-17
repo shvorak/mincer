@@ -12,6 +12,16 @@ namespace MincerTest\Stubs\Messages
         public $email;
 
         /**
+         * @var boolean
+         */
+        protected $active;
+
+        /**
+         * @var float
+         */
+        protected $discount;
+
+        /**
          * @var Profile
          */
         protected $profile;
@@ -25,6 +35,11 @@ namespace MincerTest\Stubs\Messages
          * @var \DateTime
          */
         private $createdDate;
+
+        /**
+         * @var \DateTime
+         */
+        private $loginDate;
 
         /**
          * User constructor.
@@ -87,6 +102,54 @@ namespace MincerTest\Stubs\Messages
         public function setComments($comments)
         {
             $this->comments = $comments;
+        }
+
+        /**
+         * @return \DateTime
+         */
+        public function getLoginDate()
+        {
+            return $this->loginDate;
+        }
+
+        /**
+         * @param \DateTime $loginDate
+         */
+        public function setLoginDate($loginDate)
+        {
+            $this->loginDate = $loginDate;
+        }
+
+        /**
+         * @return bool
+         */
+        public function isActive()
+        {
+            return $this->active;
+        }
+
+        /**
+         * @param bool $active
+         */
+        public function setActive($active)
+        {
+            $this->active = $active;
+        }
+
+        /**
+         * @return float
+         */
+        public function getDiscount()
+        {
+            return $this->discount;
+        }
+
+        /**
+         * @param float $discount
+         */
+        public function setDiscount($discount)
+        {
+            $this->discount = $discount;
         }
 
     }

@@ -72,6 +72,8 @@ namespace Mincer
         }
 
         /**
+         * Returns member name
+         *
          * @return string
          */
         public function getName()
@@ -80,6 +82,8 @@ namespace Mincer
         }
 
         /**
+         * Returns converter strategy
+         *
          * @return IConverterStrategy
          */
         public function getStrategy()
