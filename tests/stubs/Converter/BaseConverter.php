@@ -3,9 +3,9 @@
 namespace MincerTest\Stubs\Converter
 {
 
-    use Mincer\Converter;
+    use Mincer\ConverterInterface;
 
-    class BaseConverter extends Converter
+    class BaseConverter extends ConverterInterface
     {
 
         /**

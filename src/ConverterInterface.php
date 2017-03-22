@@ -3,7 +3,7 @@
 namespace Mincer
 {
 
-    interface IConverter
+    interface ConverterInterface
     {
 
         /**
@@ -11,7 +11,7 @@ namespace Mincer
          *
          * @param ConverterProfile $profile
          *
-         * @return IConverter
+         * @return ConverterInterface
          */
         function register(ConverterProfile $profile);
 

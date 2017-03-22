@@ -4,7 +4,7 @@ namespace Mincer\Strategies
 {
 
     use Traversable;
-    use Mincer\IConverter;
+    use Mincer\ConverterInterface;
 
     class ClassStrategy extends BaseStrategy
     {
@@ -40,7 +40,7 @@ namespace Mincer\Strategies
             $this->_collection = $collection;
         }
 
-        function serialize($value, IConverter $converter)
+        function serialize($value, ConverterInterface $converter)
         {
             if ($value === null) {
                 return $value;
@@ -59,7 +59,7 @@ namespace Mincer\Strategies
             return $converter->serialize($value);
         }
 
-        function deserialize($value, IConverter $converter)
+        function deserialize($value, ConverterInterface $converter)
         {
             if ($value === null) {
                 return $value;

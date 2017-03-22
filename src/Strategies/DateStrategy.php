@@ -4,7 +4,7 @@ namespace Mincer\Strategies
 {
 
     use DateTime;
-    use Mincer\IConverter;
+    use Mincer\ConverterInterface;
 
     class DateStrategy extends BaseStrategy
     {
@@ -24,16 +24,17 @@ namespace Mincer\Strategies
         }
 
         /**
-         * @param DateTime $value
-         * @param IConverter $converter
+         * @param DateTime           $value
+         * @param ConverterInterface $converter
+         *
          * @return string
          */
-        function serialize($value, IConverter $converter)
+        function serialize($value, ConverterInterface $converter)
         {
             return $value ? $value->format($this->_format) : $value;
         }
 
-        function deserialize($value, IConverter $converter)
+        function deserialize($value, ConverterInterface $converter)
         {
             return $value ? DateTime::createFromFormat($this->_format, $value) : $value;
         }

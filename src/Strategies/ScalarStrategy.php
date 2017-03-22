@@ -3,7 +3,7 @@
 namespace Mincer\Strategies
 {
 
-    use Mincer\IConverter;
+    use Mincer\ConverterInterface;
 
     class ScalarStrategy extends BaseStrategy
     {
@@ -35,7 +35,7 @@ namespace Mincer\Strategies
             $this->_type = $type;
         }
 
-        function serialize($value, IConverter $converter)
+        function serialize($value, ConverterInterface $converter)
         {
             if (is_array($value) || is_object($value) || is_resource($value)) {
                 throw new \InvalidArgumentException(
@@ -47,7 +47,7 @@ namespace Mincer\Strategies
             return $target;
         }
 
-        function deserialize($value, IConverter $converter)
+        function deserialize($value, ConverterInterface $converter)
         {
             return $this->serialize($value, $converter);
         }

@@ -3,7 +3,7 @@
 namespace MincerTest;
 
 use Mincer\Converter;
-use Mincer\IConverter;
+use Mincer\ConverterInterface;
 use MincerTest\Stubs\Converter\InvalidProfile;
 use MincerTest\Stubs\Converter\UserProfile;
 use MincerTest\Stubs\Messages\Comment;
@@ -23,7 +23,7 @@ class ConverterTest extends TestCase
     private $model;
 
     /**
-     * @var IConverter
+     * @var ConverterInterface
      */
     private $converter;
 

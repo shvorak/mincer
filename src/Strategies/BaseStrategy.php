@@ -3,18 +3,18 @@
 namespace Mincer\Strategies
 {
 
-    use Mincer\IConverter;
-    use Mincer\IConverterStrategy;
+    use Mincer\ConverterInterface;
+    use Mincer\ConverterStrategyInterface;
 
-    class BaseStrategy implements IConverterStrategy
+    class BaseStrategy implements ConverterStrategyInterface
     {
 
-        function serialize($value, IConverter $converter)
+        function serialize($value, ConverterInterface $converter)
         {
             return $value;
         }
 
-        function deserialize($value, IConverter $converter)
+        function deserialize($value, ConverterInterface $converter)
         {
             return $value;
         }

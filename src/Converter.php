@@ -4,7 +4,7 @@
 namespace Mincer
 {
 
-    class Converter implements IConverter
+    class Converter implements ConverterInterface
     {
 
         /**

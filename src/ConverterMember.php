@@ -19,7 +19,7 @@ namespace Mincer
         private $_name;
 
         /**
-         * @var IConverterStrategy
+         * @var ConverterStrategyInterface
          */
         private $_strategy;
 
@@ -38,7 +38,7 @@ namespace Mincer
             $this->_strategy = new BaseStrategy();
         }
 
-        public function using(IConverterStrategy $strategy)
+        public function using(ConverterStrategyInterface $strategy)
         {
             $this->_strategy = $strategy;
         }
@@ -84,7 +84,7 @@ namespace Mincer
         /**
          * Returns converter strategy
          *
-         * @return IConverterStrategy
+         * @return ConverterStrategyInterface
          */
         public function getStrategy()
         {
