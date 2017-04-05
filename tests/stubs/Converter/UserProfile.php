@@ -10,6 +10,7 @@ namespace MincerTest\Stubs\Converter
     use MincerTest\Stubs\Messages\Comment;
     use MincerTest\Stubs\Messages\CommentCollection;
     use MincerTest\Stubs\Messages\CreateUserMessage;
+    use MincerTest\Stubs\Messages\Entity;
     use MincerTest\Stubs\Messages\InvalidUser;
     use MincerTest\Stubs\Messages\Profile;
     use MincerTest\Stubs\Messages\User;
@@ -42,6 +43,11 @@ namespace MincerTest\Stubs\Converter
             $this->create(CreateUserMessage::class);
             $this->create(Profile::class);
             $this->create(Comment::class);
+
+            $this->create(Entity::class, function (ConverterConfigBuilder $config) {
+                $config->property('id')->from('_id')->string();
+                $config->property('email')->from('$email')->string();
+            });
 
             /**
              *  INVALID CONFIGURATION

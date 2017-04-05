@@ -49,7 +49,7 @@ namespace Mincer
                 $member = $this->selectMember($members, $name);
 
                 if ($member) {
-                    $result[$name] = $member->getStrategy()
+                    $result[$member->getSource($name)] = $member->getStrategy()
                         ->serialize($property->get($data), $this);
                 }
             }
@@ -80,23 +80,20 @@ namespace Mincer
             $members = $this->selectMembersFor($className);
 
             foreach ($properties as $property) {
-                $name = $property->getName();
+                $prop = $property->getName();
+                $member = $this->selectMember($members, $prop);
 
-                // TODO : Check if value exists  if (false === array_key_exists($name, $data))
-                if (false === array_key_exists($name, $data)) {
-                    // No data passed
+                if (null === $member || false === array_key_exists($member->getSource($prop), $data)) {
                     // TODO : Maybe need throw ValidateException?
                     continue;
                 }
 
-                if ($member = $this->selectMember($members, $property->getName())) {
-                    // TODO : Check for null values
-                    $property->set($result,
-                        $member
-                            ->getStrategy()
-                            ->deserialize($data[$name], $this)
-                    );
-                }
+                // TODO : Check for null values
+                $property->set($result,
+                    $member
+                        ->getStrategy()
+                        ->deserialize($data[$member->getSource($prop)], $this)
+                );
             }
             return $result;
         }

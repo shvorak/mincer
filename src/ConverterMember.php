@@ -19,9 +19,17 @@ namespace Mincer
         private $_name;
 
         /**
+         * Source field name
+         *
+         * @var string
+         */
+        private $_source;
+
+        /**
          * @var ConverterStrategyInterface
          */
         private $_strategy;
+
 
         /**
          * ConverterMember constructor.
@@ -71,6 +79,12 @@ namespace Mincer
             $this->_strategy = new ScalarStrategy('boolean');
         }
 
+        public function from($field)
+        {
+            $this->_source = $field;
+            return $this;
+        }
+
         /**
          * Returns member name
          *
@@ -79,6 +93,16 @@ namespace Mincer
         public function getName()
         {
             return $this->_name;
+        }
+
+        /**
+         * @return string
+         */
+        public function getSource($field = null)
+        {
+            return $this->_source === null
+                ? $field
+                : $this->_source;
         }
 
         /**
@@ -95,6 +119,7 @@ namespace Mincer
             }
             return $this->_strategy;
         }
+
 
     }
 

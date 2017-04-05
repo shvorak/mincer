@@ -9,6 +9,7 @@ use MincerTest\Stubs\Converter\UserProfile;
 use MincerTest\Stubs\Messages\Comment;
 use MincerTest\Stubs\Messages\CommentCollection;
 use MincerTest\Stubs\Messages\CreateUserMessage;
+use MincerTest\Stubs\Messages\Entity;
 use MincerTest\Stubs\Messages\InvalidUser;
 use MincerTest\Stubs\Messages\Profile;
 use MincerTest\Stubs\Messages\User;
@@ -103,6 +104,26 @@ class ConverterTest extends TestCase
         $this->assertEquals(123, $user->id);
         $this->assertEquals('email', $user->email);
         $this->assertEquals(true, $user->isActive());
+    }
+
+    public function testDeserializeWithMembersFrom()
+    {
+        $data = [
+            '_id' => '123',
+            '$email' => 'email',
+            'active' => 1
+        ];
+
+        /** @var Entity $user */
+        $user = $this->converter->deserialize($data, Entity::class);
+
+        $this->assertEquals(123, $user->getId());
+        $this->assertEquals('email', $user->getEmail());
+        $this->assertEquals(true, $user->isActive());
+
+        $back = $this->converter->serialize($user);
+
+        $this->assertEquals($data, $back);
     }
 
     /**
