@@ -10,12 +10,12 @@ namespace Mincer
         /**
          * @var ConverterConfig[]
          */
-        private $_configs = [];
+        private $_configs = array();
 
         /**
          * @var ConverterProfile[]
          */
-        private $_profiles = [];
+        private $_profiles = array();
 
         /**
          * @inheritdoc
@@ -36,7 +36,7 @@ namespace Mincer
                 throw new \InvalidArgumentException('Serialize expects object.');
             }
 
-            $result = [];
+            $result = array();
             $config = $this->selectConfigFor(get_class($data));
 
             $members = $this->selectMembersFor(get_class($data));
@@ -62,8 +62,9 @@ namespace Mincer
          */
         function serializeCollection($data)
         {
-            return array_map(function ($item) {
-                return $this->serialize($item);
+            $self = $this;
+            return array_map(function ($item) use ($self) {
+                return $self->serialize($item);
             }, $data);
         }
 
@@ -73,7 +74,12 @@ namespace Mincer
         function deserialize($data, $className)
         {
             $reflect = new \ReflectionClass($className);
-            $result = $reflect->newInstanceWithoutConstructor();
+            $result = unserialize(
+                sprintf(
+                    'O:%d:"%s":0:{}',
+                    strlen($reflect->getName()), $reflect->getName()
+                )
+            );
             $config = $this->selectConfigFor($className);
             $properties = $config->getProperties();
 
@@ -103,8 +109,9 @@ namespace Mincer
          */
         function deserializeCollection($data, $className)
         {
-            return array_map(function ($item) use ($className) {
-                return $this->deserialize($item, $className);
+            $self = $this;
+            return array_map(function ($item) use ($className, $self) {
+                return $self->deserialize($item, $className);
             }, $data);
         }
 
@@ -196,7 +203,10 @@ namespace Mincer
                 throw new \Exception(sprintf('Profile for class %s not found.', $className));
             }
 
-            return array_values($profiles)[0];
+            // Reset resulted array keys
+            $profiles = array_values($profiles);
+
+            return $profiles[0];
         }
 
     }

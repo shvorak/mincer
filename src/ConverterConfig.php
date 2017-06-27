@@ -29,7 +29,7 @@ namespace Mincer
         /**
          * @var ConverterMember[]
          */
-        private $_members = [];
+        private $_members = array();
 
         /**
          * @var ReflectionClass
@@ -99,7 +99,7 @@ namespace Mincer
         public function getProperties()
         {
             if ($this->_properties == null) {
-                $properties = [];
+                $properties = array();
                 $parent = $this->getReflection()->getParentClass();
                 while ($parent) {
                     try {
@@ -114,7 +114,7 @@ namespace Mincer
                         $list[$item->getName()] = $item;
                     }
                     return $list;
-                }, []);
+                }, array());
 
                 $list = array_filter($properties, function (ReflectionProperty $property) {
                     return $property->isStatic() === false;

@@ -27,8 +27,8 @@ namespace MincerTest\Stubs\Converter
         {
             $this->others()->raw();
 
-            $this->properties(['id'])->integer();
-            $this->properties(['createdDate', 'updatedDate'])->date(DATE_COOKIE);
+            $this->properties(array('id'))->integer();
+            $this->properties(array('createdDate', 'updatedDate'))->date(DATE_COOKIE);
 
             $this->create(User::className(), function (ConverterConfigBuilder $config) {
                 $config->property('name')->string();

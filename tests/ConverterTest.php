@@ -62,15 +62,15 @@ class ConverterTest extends TestCase
      */
     public function testSerializeNotAnObject()
     {
-        $this->converter->serialize([]);
+        $this->converter->serialize(array());
     }
 
     public function testConverting()
     {
         $user = new User(1, 'admin@admin.com', new \DateTime(), new Profile('1', '2', '3'));
-        $user->setComments(new CommentCollection([
+        $user->setComments(new CommentCollection(array(
             new Comment('hi', 1)
-        ]));
+        )));
 
         $data = $this->converter->serialize($user);
         $this->assertTrue(is_array($data));
@@ -91,12 +91,12 @@ class ConverterTest extends TestCase
 
     public function testDeserializeFormArray()
     {
-        $data = [
+        $data = array(
             'id' => 123,
             'email' => 'email',
             'active' => 1,
             'notExists' => 'value'
-        ];
+        );
 
         /** @var User $user */
         $user = $this->converter->deserialize($data, User::className());
@@ -108,11 +108,11 @@ class ConverterTest extends TestCase
 
     public function testDeserializeWithMembersFrom()
     {
-        $data = [
+        $data = array(
             '_id' => '123',
             '$email' => 'email',
             'active' => 1
-        ];
+        );
 
         /** @var Entity $user */
         $user = $this->converter->deserialize($data, Entity::className());

@@ -14,7 +14,7 @@ namespace Mincer
         /**
          * @var ConverterMember[]
          */
-        private $_members = [];
+        private $_members = array();
 
         /**
          * ConverterConfigBuilder constructor.

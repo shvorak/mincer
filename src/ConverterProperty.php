@@ -52,7 +52,7 @@ namespace Mincer
         public function getSetter($instance)
         {
             if ($this->hasSetter()) {
-                return [$instance, $this->getSetterName()];
+                return array($instance, $this->getSetterName());
             }
 
             if (false === $this->isPublic()) {
@@ -61,7 +61,10 @@ namespace Mincer
                 ));
             }
 
-            return function ($value) use ($instance) { $instance->{$this->_reflect->name} = $value;};
+            $self = $this;
+            return function ($value) use ($instance, $self) {
+                $instance->{$self->getReflection()->name} = $value;
+            };
         }
 
         /**
@@ -89,7 +92,7 @@ namespace Mincer
         public function getGetter($instance)
         {
             if ($this->hasGetter()) {
-                return [$instance, $this->getGetterName()];
+                return array($instance, $this->getGetterName());
             }
 
             if (false === $this->isPublic()) {
@@ -98,7 +101,10 @@ namespace Mincer
                 ));
             }
 
-            return function () use ($instance) { return $instance->{$this->_reflect->name};};
+            $self = $this;
+            return function () use ($instance, $self) {
+                return $instance->{$self->getReflection()->name};
+            };
         }
 
         public function isPublic()

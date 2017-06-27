@@ -10,17 +10,17 @@ namespace Mincer
         /**
          * @var ConverterConfig[]
          */
-        private $_configs = [];
+        private $_configs = array();
 
         /**
          * @var ConverterMember[]
          */
-        private $_members = [];
+        private $_members = array();
 
         /**
-         * @var callable[]
+         * @var \Closure[]
          */
-        private $_builders = [];
+        private $_builders = array();
 
         /**
          * Register fallback for all unhandled members in this profile
@@ -53,13 +53,13 @@ namespace Mincer
          * Register class converting config
          *
          * @param string $class
-         * @param callable $configFactory [optional]
+         * @param \Closure $configFactory [optional]
          *
          * @throws \Exception
          *
          * @return void
          */
-        function create($class, callable $configFactory = null)
+        function create($class, \Closure $configFactory = null)
         {
             if (false === class_exists($class)) {
                 throw new \Exception('Invalid class name');
