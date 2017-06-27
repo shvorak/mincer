@@ -3,7 +3,7 @@
 namespace MincerTest\Stubs\Messages
 {
 
-    class Entity
+    class Entity extends Model
     {
 
 

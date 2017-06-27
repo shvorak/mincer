@@ -33,8 +33,8 @@ class ConverterMemberTest extends TestCase
     public function setUp()
     {
         $this->profile = new UserProfile();
-        $this->userConfig = $this->profile->getConfig(User::class);
-        $this->messageConfig =  $this->profile->getConfig(CreateUserMessage::class);
+        $this->userConfig = $this->profile->getConfig(User::className());
+        $this->messageConfig =  $this->profile->getConfig(CreateUserMessage::className());
     }
 
     public function testEmptyMembers()
@@ -46,7 +46,7 @@ class ConverterMemberTest extends TestCase
     {
         $loginDate = $this->userConfig->getMember('loginDate');
         $this->assertEquals('loginDate', $loginDate->getName());
-        $this->assertInstanceOf(DateStrategy::class, $loginDate->getStrategy());
+        $this->assertInstanceOf('Mincer\Strategies\DateStrategy', $loginDate->getStrategy());
     }
 
     /**
@@ -54,7 +54,7 @@ class ConverterMemberTest extends TestCase
      */
     public function testStrategyNotSet()
     {
-        $this->profile->getConfig(InvalidUser::class)->getMember('notExists')->getStrategy();
+        $this->profile->getConfig(InvalidUser::className())->getMember('notExists')->getStrategy();
     }
 
 }

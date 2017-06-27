@@ -75,7 +75,7 @@ class ConverterTest extends TestCase
         $data = $this->converter->serialize($user);
         $this->assertTrue(is_array($data));
 
-        $user2 = $this->converter->deserialize($data, User::class);
+        $user2 = $this->converter->deserialize($data, User::className());
         $this->assertEquals($user, $user2);
     }
 
@@ -85,7 +85,7 @@ class ConverterTest extends TestCase
         $data = $this->converter->serialize($message);
         $this->assertTrue(is_array($data));
 
-        $user2 = $this->converter->deserialize($data, CreateUserMessage::class);
+        $user2 = $this->converter->deserialize($data, CreateUserMessage::className());
         $this->assertEquals($message, $user2);
     }
 
@@ -99,7 +99,7 @@ class ConverterTest extends TestCase
         ];
 
         /** @var User $user */
-        $user = $this->converter->deserialize($data, User::class);
+        $user = $this->converter->deserialize($data, User::className());
 
         $this->assertEquals(123, $user->id);
         $this->assertEquals('email', $user->email);
@@ -115,7 +115,7 @@ class ConverterTest extends TestCase
         ];
 
         /** @var Entity $user */
-        $user = $this->converter->deserialize($data, Entity::class);
+        $user = $this->converter->deserialize($data, Entity::className());
 
         $this->assertEquals(123, $user->getId());
         $this->assertEquals('email', $user->getEmail());
@@ -136,7 +136,7 @@ class ConverterTest extends TestCase
 
         $values = $converter->serialize($this->model);
 
-        $converter->deserialize($values, InvalidUser::class);
+        $converter->deserialize($values, InvalidUser::className());
     }
 
 }

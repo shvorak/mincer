@@ -24,19 +24,19 @@ class ConverterProfileTest extends TestCase
 
     public function testClassConfigExists()
     {
-        $this->assertTrue($this->profile->hasConfig(User::class));
+        $this->assertTrue($this->profile->hasConfig(User::className()));
     }
 
     public function testClassConfigReflection()
     {
-        $config = $this->profile->getConfig(User::class);
-        $this->assertInstanceOf(ConverterConfig::class, $config);
+        $config = $this->profile->getConfig(User::className());
+        $this->assertInstanceOf('Mincer\ConverterConfig', $config);
 
-        $this->assertEquals($config, $this->profile->getConfig(User::class));
+        $this->assertEquals($config, $this->profile->getConfig(User::className()));
 
         $reflect = $config->getReflection();
         $this->assertNotNull($reflect);
-        $this->assertInstanceOf(\ReflectionClass::class, $config->getReflection());
+        $this->assertInstanceOf('ReflectionClass', $config->getReflection());
         $this->assertEquals($reflect, $config->getReflection());
     }
 
@@ -45,7 +45,7 @@ class ConverterProfileTest extends TestCase
      */
     public function testCreateNotExistingClass()
     {
-        $this->profile->create(NotExistingClass::class);
+        $this->profile->create('NotExistingClass');
     }
 
     /**
@@ -53,8 +53,8 @@ class ConverterProfileTest extends TestCase
      */
     public function testClassConfigMissed()
     {
-        $this->assertFalse($this->profile->hasConfig(NotRegistered::class));
-        $this->profile->getConfig(NotRegistered::class);
+        $this->assertFalse($this->profile->hasConfig(NotRegistered::className()));
+        $this->profile->getConfig(NotRegistered::className());
     }
 
     public function testClassConfigMembers()

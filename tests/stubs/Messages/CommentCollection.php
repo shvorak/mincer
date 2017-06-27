@@ -4,7 +4,7 @@ namespace MincerTest\Stubs\Messages
 {
 
 
-    class CommentCollection implements \IteratorAggregate
+    class CommentCollection extends Model implements \IteratorAggregate
     {
 
         /**

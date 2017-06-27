@@ -3,7 +3,7 @@
 namespace MincerTest\Stubs\Messages
 {
 
-    class Profile
+    class Profile extends Model
     {
 
         public $name;

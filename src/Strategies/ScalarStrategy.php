@@ -8,17 +8,17 @@ namespace Mincer\Strategies
     class ScalarStrategy extends BaseStrategy
     {
 
-        const SUPPORTER = [
-            'string',
-            'integer',
-            'boolean',
-            'float',
-        ];
-
         /**
          * @var string
          */
         private $_type;
+
+        private $_supported = array(
+            'string',
+            'integer',
+            'boolean',
+            'float',
+        );
 
         /**
          * ScalarRule constructor.
@@ -27,7 +27,7 @@ namespace Mincer\Strategies
          */
         public function __construct($type)
         {
-            if (false === in_array($type, static::SUPPORTER)) {
+            if (false === in_array($type, $this->_supported)) {
                 throw new \InvalidArgumentException(
                     sprintf('Type "%s" not supported by ScalarStrategy', $type)
                 );

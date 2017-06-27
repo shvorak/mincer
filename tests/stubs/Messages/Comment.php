@@ -3,7 +3,7 @@
 namespace MincerTest\Stubs\Messages
 {
 
-    class Comment
+    class Comment extends Model
     {
 
         public $text;

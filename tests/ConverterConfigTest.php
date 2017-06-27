@@ -33,25 +33,27 @@ class ConverterConfigTest extends TestCase
     protected function setUp()
     {
         $this->profile = new UserProfile();
-        $this->config = $this->profile->getConfig(User::class);
+        $this->config = $this->profile->getConfig(User::className());
         $this->invalidUser = new InvalidUser(1, '', new \DateTime(), new Profile('', '', ''));
     }
 
     public function testEmptyClassConfig()
     {
-        $config = $this->profile->getConfig(Profile::class);
-        $this->assertTrue(empty($config->getMembers()));
+        $config = $this->profile->getConfig(Profile::className());
+        $members = $config->getMembers();
+        $this->assertTrue(empty($members));
     }
 
     public function testRealClassConfig()
     {
-        $this->assertFalse(empty($this->config->getMembers()));
+        $members = $this->config->getMembers();
+        $this->assertFalse(empty($members));
 
         $this->assertNotNull($this->config->getMember('profile'));
 
         $property = $this->config->getProperty('profile');
 
-        $this->assertInstanceOf(ConverterProperty::class, $property);
+        $this->assertInstanceOf('Mincer\ConverterProperty', $property);
         $this->assertEquals('profile', $property->getName());
 
         $this->assertFalse($property->isPublic());
@@ -62,10 +64,10 @@ class ConverterConfigTest extends TestCase
 
     public function testExtendedClass()
     {
-        $config = $this->profile->getConfig(CreateUserMessage::class);
+        $config = $this->profile->getConfig(CreateUserMessage::className());
         $this->assertNotNull($config);
 
-        $this->assertInstanceOf(ConverterProperty::class, $config->getProperty('profile'));
+        $this->assertInstanceOf('Mincer\ConverterProperty', $config->getProperty('profile'));
     }
 
     public function testProperties()
@@ -112,7 +114,7 @@ class ConverterConfigTest extends TestCase
      */
     public function testClassPropertyNoSetter()
     {
-        $config = $this->profile->getConfig(InvalidUser::class);
+        $config = $this->profile->getConfig(InvalidUser::className());
         $config->getProperty('reason')->getSetter($this->invalidUser);
     }
 
@@ -121,7 +123,7 @@ class ConverterConfigTest extends TestCase
      */
     public function testClassPropertyNoGetter()
     {
-        $config = $this->profile->getConfig(InvalidUser::class);
+        $config = $this->profile->getConfig(InvalidUser::className());
         $config->getProperty('reason')->getGetter($this->invalidUser);
     }
 
