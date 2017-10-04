@@ -3,6 +3,7 @@
 namespace Mincer
 {
 
+    use Mincer\Strategies\ArrayStrategy;
     use Mincer\Strategies\BaseStrategy;
     use Mincer\Strategies\DateStrategy;
     use Mincer\Strategies\ClassStrategy;
@@ -59,8 +60,24 @@ namespace Mincer
             $this->_strategy = new ClassStrategy($class);
         }
 
-        public function listOf($class, $wrapper = null) {
-            $this->_strategy = new ClassStrategy($class, true, $wrapper);
+        /**
+         * Use array of classes
+         *
+         * @param string $className
+         * @param string $wrapperClassName
+         */
+        public function listOf($className, $wrapperClassName = null) {
+            $this->_strategy = new ClassStrategy($className, true, $wrapperClassName);
+        }
+
+        /**
+         * Use array of scalar
+         *
+         * @param string $scalarType
+         */
+        public function arrayOf($scalarType)
+        {
+            $this->_strategy = new ArrayStrategy($scalarType);
         }
 
         public function date($format = DATE_ISO8601) {

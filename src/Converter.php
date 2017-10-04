@@ -4,6 +4,8 @@
 namespace Mincer
 {
 
+    use Mincer\Errors\NotRegisteredException;
+
     class Converter implements ConverterInterface
     {
 
@@ -200,7 +202,7 @@ namespace Mincer
                 throw new \Exception('Multiple class converter config found');
             }
             if (count($profiles) === 0) {
-                throw new \Exception(sprintf('Profile for class %s not found.', $className));
+                throw new NotRegisteredException(sprintf('Profile for class %s not found.', $className));
             }
 
             // Reset resulted array keys
