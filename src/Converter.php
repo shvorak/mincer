@@ -75,6 +75,8 @@ namespace Mincer
          */
         function deserialize($data, $className)
         {
+            $config = $this->selectConfigFor($className);
+
             $reflect = new \ReflectionClass($className);
             $result = unserialize(
                 sprintf(
@@ -82,7 +84,7 @@ namespace Mincer
                     strlen($reflect->getName()), $reflect->getName()
                 )
             );
-            $config = $this->selectConfigFor($className);
+
             $properties = $config->getProperties();
 
             $members = $this->selectMembersFor($className);
@@ -123,6 +125,8 @@ namespace Mincer
          * @param string $className
          *
          * @return ConverterConfig
+         *
+         * @throws NotRegisteredException
          */
         private function selectConfigFor($className)
         {
@@ -134,7 +138,7 @@ namespace Mincer
 
             // TODO : Remove this condition
             if (false === array_key_exists($className, $this->_configs)) {
-                throw new \InvalidArgumentException('Converter config not found');
+                throw new NotRegisteredException('Converter config not found');
             }
 
             return $this->_configs[$className];
