@@ -4,7 +4,7 @@
 namespace Mincer
 {
 
-    use Mincer\Errors\NotRegisteredException;
+    use Mincer\Errors\ClassNotRegisteredException;
 
     class Converter implements ConverterInterface
     {
@@ -126,10 +126,13 @@ namespace Mincer
          *
          * @return ConverterConfig
          *
-         * @throws NotRegisteredException
+         * @throws ClassNotRegisteredException
          */
         private function selectConfigFor($className)
         {
+            if (false === is_string($className)) {
+                throw new \InvalidArgumentException('Class name must be a string');
+            }
             if (false === array_key_exists($className, $this->_configs)) {
                 $profile = $this->selectProfileFor($className);
                 // Register converter config
@@ -138,7 +141,7 @@ namespace Mincer
 
             // TODO : Remove this condition
             if (false === array_key_exists($className, $this->_configs)) {
-                throw new NotRegisteredException('Converter config not found');
+                throw new ClassNotRegisteredException('Converter config not found');
             }
 
             return $this->_configs[$className];
@@ -206,7 +209,7 @@ namespace Mincer
                 throw new \Exception('Multiple class converter config found');
             }
             if (count($profiles) === 0) {
-                throw new NotRegisteredException(sprintf('Profile for class %s not found.', $className));
+                throw new ClassNotRegisteredException(sprintf('Profile for class %s not found.', $className));
             }
 
             // Reset resulted array keys
