@@ -95,7 +95,13 @@ class ConverterTest extends TestCase
             'id' => 123,
             'email' => 'email',
             'active' => 1,
-            'notExists' => 'value'
+            'notExists' => 'value',
+            'createdDate' => (new \DateTime())->format(DATE_COOKIE),
+            'profile' => array(
+                'name' => '',
+                'surname' => '',
+                'patronymic' => '',
+            ),
         );
 
         /** @var User $user */
@@ -111,7 +117,7 @@ class ConverterTest extends TestCase
         $data = array(
             '_id' => '123',
             '$email' => 'email',
-            'active' => 1
+            'active' => 1,
         );
 
         /** @var Entity $user */
