@@ -82,27 +82,22 @@ namespace Mincer
             $reflect = new \ReflectionClass($className);
 
             $constructor = $reflect->getConstructor();
-            if ($constructor) {
-                $invokeArgs = [];
-                foreach ($constructor->getParameters() as $param) {
-                    $paramName = $param->getName();
-                    $invokeArgs[] = $this->deserializeParam(
+
+            $result = $constructor
+                ? $reflect->newInstanceArgs(array_map(function ($paramName) use ($data, $members) {
+                    return $this->deserializeParam(
                         $data,
                         $this->selectMember($members, $paramName),
                         $paramName
                     );
-                }
-                $result = $reflect->newInstanceArgs($invokeArgs);
-            }
-            else {
-                $result = unserialize(
+                }, $constructor->getParameters()))
+
+                : unserialize(
                     sprintf(
                         'O:%d:"%s":0:{}',
                         strlen($reflect->getName()), $reflect->getName()
                     )
                 );
-            }
-
 
             $properties = $config->getProperties();
 
@@ -240,9 +235,9 @@ namespace Mincer
         }
 
         /**
-         * @param array $data
+         * @param array           $data
          * @param ConverterMember $member
-         * @param string $param
+         * @param string          $param
          * @return mixed
          */
         private function deserializeParam($data, $member, $param)
