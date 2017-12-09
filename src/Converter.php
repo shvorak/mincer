@@ -52,7 +52,7 @@ namespace Mincer
 
                 if ($member) {
                     $result[$member->getSource($name)] = $member->getStrategy()
-                        ->serialize($property->get($data), $this);
+                                                                ->serialize($property->get($data), $this);
                 }
             }
 
@@ -77,19 +77,42 @@ namespace Mincer
         {
             $config = $this->selectConfigFor($className);
 
+            $members = $this->selectMembersFor($className);
+
             $reflect = new \ReflectionClass($className);
-            $result = unserialize(
-                sprintf(
-                    'O:%d:"%s":0:{}',
-                    strlen($reflect->getName()), $reflect->getName()
-                )
-            );
+
+            $constructor = $reflect->getConstructor();
+            if ($constructor) {
+                $invokeArgs = [];
+                foreach ($constructor->getParameters() as $param) {
+                    $paramName = $param->getName();
+                    $invokeArgs[] = $this->deserializeParam(
+                        $data,
+                        $this->selectMember($members, $paramName),
+                        $paramName
+                    );
+                }
+                $result = $reflect->newInstanceArgs($invokeArgs);
+            }
+            else {
+                $result = unserialize(
+                    sprintf(
+                        'O:%d:"%s":0:{}',
+                        strlen($reflect->getName()), $reflect->getName()
+                    )
+                );
+            }
+
 
             $properties = $config->getProperties();
 
-            $members = $this->selectMembersFor($className);
-
             foreach ($properties as $property) {
+                if (
+                    false === $property->isPublic()
+                    && false === $property->hasSetter()
+                ) {
+                    continue;
+                }
                 $prop = $property->getName();
                 $member = $this->selectMember($members, $prop);
 
@@ -100,9 +123,7 @@ namespace Mincer
 
                 // TODO : Check for null values
                 $property->set($result,
-                    $member
-                        ->getStrategy()
-                        ->deserialize($data[$member->getSource($prop)], $this)
+                    $this->deserializeParam($data, $member, $prop)
                 );
             }
             return $result;
@@ -218,6 +239,16 @@ namespace Mincer
             return $profiles[0];
         }
 
+        /**
+         * @param array $data
+         * @param ConverterMember $member
+         * @param string $param
+         * @return mixed
+         */
+        private function deserializeParam($data, $member, $param)
+        {
+            return $member->getStrategy()->deserialize($data[$member->getSource($param)], $this);
+        }
     }
 
 }

@@ -13,7 +13,8 @@
     "autoload": {
         "psr-4": {
             "Mincer\\": "./src",
-            "MincerTest\\": "./tests"
+            "MincerTest\\": "./tests",
+            "MincerTest\\Stubs\\": "./tests/stubs"
         }
     },
     "require-dev": {
