@@ -50,7 +50,7 @@ namespace Mincer
                 $name = $property->getName();
                 $member = $this->selectMember($members, $name);
 
-                if ($member) {
+                if ($member && false === $member->isIgnored()) {
                     $result[$member->getSource($name)] = $member->getStrategy()
                         ->serialize($property->get($data), $this);
                 }
@@ -95,6 +95,10 @@ namespace Mincer
 
                 if (null === $member || false === array_key_exists($member->getSource($prop), $data)) {
                     // TODO : Maybe need throw ValidateException?
+                    continue;
+                }
+
+                if ($member->isIgnored()) {
                     continue;
                 }
 

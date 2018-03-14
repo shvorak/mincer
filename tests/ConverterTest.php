@@ -12,6 +12,7 @@ use MincerTest\Stubs\Messages\CreateUserMessage;
 use MincerTest\Stubs\Messages\Entity;
 use MincerTest\Stubs\Messages\InvalidUser;
 use MincerTest\Stubs\Messages\Profile;
+use MincerTest\Stubs\Messages\TestEntity;
 use MincerTest\Stubs\Messages\User;
 use PHPUnit\Framework\TestCase;
 
@@ -27,7 +28,6 @@ class ConverterTest extends TestCase
      * @var ConverterInterface
      */
     private $converter;
-
 
     protected function setUp()
     {
@@ -45,6 +45,7 @@ class ConverterTest extends TestCase
         $converter = new Converter();
         $converter->serialize($this->model);
     }
+
 
     /**
      * @expectedException \Exception
@@ -69,7 +70,7 @@ class ConverterTest extends TestCase
     {
         $user = new User(1, 'admin@admin.com', new \DateTime(), new Profile('1', '2', '3'));
         $user->setComments(new CommentCollection(array(
-            new Comment('hi', 1)
+            new Comment('hi', 1),
         )));
 
         $data = $this->converter->serialize($user);
@@ -92,10 +93,10 @@ class ConverterTest extends TestCase
     public function testDeserializeFormArray()
     {
         $data = array(
-            'id' => 123,
-            'email' => 'email',
-            'active' => 1,
-            'notExists' => 'value'
+            'id'        => 123,
+            'email'     => 'email',
+            'active'    => 1,
+            'notExists' => 'value',
         );
 
         /** @var User $user */
@@ -109,9 +110,9 @@ class ConverterTest extends TestCase
     public function testDeserializeWithMembersFrom()
     {
         $data = array(
-            '_id' => '123',
+            '_id'    => '123',
             '$email' => 'email',
-            'active' => 1
+            'active' => 1,
         );
 
         /** @var Entity $user */
@@ -137,6 +138,47 @@ class ConverterTest extends TestCase
         $values = $converter->serialize($this->model);
 
         $converter->deserialize($values, InvalidUser::className());
+    }
+
+    /**
+     * @dataProvider ignoredSerializationProvider
+     * @param TestEntity $entity
+     */
+    public function testIgnoredPropertySerialization(TestEntity $entity)
+    {
+        $data = $this->converter->serialize($entity);
+        $this->assertEquals($entity->isBool(),$data['bool']);
+        $this->assertEquals($entity->getString(),$data['string']);
+        $this->assertArrayNotHasKey('ignored', $data);
+    }
+
+    /**
+     * @dataProvider ignoredDeserializationProvider
+     * @param array $data
+     */
+    public function testIgnoredPropertyDeserialization(array $data)
+    {
+        /** @var TestEntity $entity */
+        $entity = $this->converter->deserialize($data, TestEntity::className());
+        $this->assertEquals($data['bool'],$entity->isBool());
+        $this->assertEquals($data['string'],$entity->getString());
+        $this->assertEquals('', $entity->getIgnored());
+    }
+
+    public function ignoredSerializationProvider()
+    {
+        return array(
+            array(new TestEntity()),
+            array(new TestEntity(true, 'test', 'ignored')),
+        );
+    }
+
+    public function ignoredDeserializationProvider()
+    {
+        return array(
+            array(array('bool' => false, 'string' => 'test', 'ignored' => '')),
+            array(array('bool' => true, 'string' => 'test2', 'ignored' => 'ignored')),
+        );
     }
 
 }
