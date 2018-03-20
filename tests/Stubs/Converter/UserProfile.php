@@ -14,6 +14,7 @@ namespace MincerTest\Stubs\Converter
     use MincerTest\Stubs\Messages\InvalidUser;
     use MincerTest\Stubs\Messages\Model;
     use MincerTest\Stubs\Messages\Profile;
+    use MincerTest\Stubs\Messages\TestEntity;
     use MincerTest\Stubs\Messages\User;
 
 
@@ -58,6 +59,12 @@ namespace MincerTest\Stubs\Converter
             });
 
             $this->create(Model::className());
+
+            $this->create(TestEntity::className(), function (ConverterConfigBuilder $builder) {
+                $builder->property('bool')->boolean();
+                $builder->property('string')->string();
+                $builder->property('ignored')->ignored();
+            });
         }
     }
 

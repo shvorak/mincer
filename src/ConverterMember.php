@@ -31,6 +31,7 @@ namespace Mincer
          */
         private $_strategy;
 
+        private $_ignored = false;
 
         /**
          * ConverterMember constructor.
@@ -137,7 +138,16 @@ namespace Mincer
             return $this->_strategy;
         }
 
+        /**
+         * @return bool
+         */
+        public function isIgnored() {
+            return $this->_ignored;
+        }
 
+        public function ignored() {
+            $this->_ignored = true;
+        }
     }
 
 }

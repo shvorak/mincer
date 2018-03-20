@@ -8,6 +8,7 @@ use Mincer\Strategies\DateStrategy;
 use MincerTest\Stubs\Converter\UserProfile;
 use MincerTest\Stubs\Messages\CreateUserMessage;
 use MincerTest\Stubs\Messages\InvalidUser;
+use MincerTest\Stubs\Messages\TestEntity;
 use MincerTest\Stubs\Messages\User;
 use PHPUnit\Framework\TestCase;
 
@@ -34,7 +35,7 @@ class ConverterMemberTest extends TestCase
     {
         $this->profile = new UserProfile();
         $this->userConfig = $this->profile->getConfig(User::className());
-        $this->messageConfig =  $this->profile->getConfig(CreateUserMessage::className());
+        $this->messageConfig = $this->profile->getConfig(CreateUserMessage::className());
     }
 
     public function testEmptyMembers()
@@ -55,6 +56,14 @@ class ConverterMemberTest extends TestCase
     public function testStrategyNotSet()
     {
         $this->profile->getConfig(InvalidUser::className())->getMember('notExists')->getStrategy();
+    }
+
+    public function testIgnored()
+    {
+        $config = $this->profile->getConfig(TestEntity::className());
+        $this->assertFalse($config->getMember('bool')->isIgnored());
+        $this->assertFalse($config->getMember('string')->isIgnored());
+        $this->assertTrue($config->getMember('ignored')->isIgnored());
     }
 
 }
